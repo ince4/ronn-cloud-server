@@ -10,7 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.1"
+    "axios": "^0.27.2",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "find": "^0.3.0",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.21.4"
   },
   "config": {
     "port": 3001
