@@ -7,15 +7,17 @@ module.exports = async function registerApi(app, vd) {
 
   function registerHandler(route, config) {
     const callBack = (req, res) => {
-      // if (config.needLogin && !isLogin(req)) {
-        // res.send({ statusCode: 0, message: '需登录后调用' })
-        // return
-      // }
+
+req.session.isLogin = true
+      if (config.needLogin && !isLogin(req)) {
+        res.send({ statusCode: 0, message: '需登录后调用' })
+        return
+      }
 
       config.process(req, res)
     }
-    
-    app.post(`/${route}`, callBack)
+
+    app.post(`/api/${route}`, callBack)
   }
 
   const files = find.fileSync(/\.js$/, basePath)

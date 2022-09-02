@@ -2,22 +2,28 @@ const { getUid } = require('../../utils/accountInfo')
 const { tables } = require('../../utils/dbHelper')
 
 module.exports = {
-  needLogin: true,
   async process(req, res) {
-    // const userRes = await tables.userAccountRecords.findAll({
-      // where: {
-      //   uid: 'M32145',
-      // },
-    // })
+    const { accountName, password } = req.body
 
     const userRes = await tables.userAccountRecords.findOne({
       where: {
-        uid: 'M32145',
+        accountName,
+        password
       },
     })
 
-    res.send({
-      userRes
-    })
+    if (userRes) {
+      req.session.isLogin = true
+      res.send({
+        isLogin: req.session.isLogin,
+        statusCode: 1,
+        statusMsg: '登录成功',
+      })
+    } else {
+      res.send({
+        statusCode: 1,
+        statusMsg: '登录失败'
+      })
+    }
   }
 }

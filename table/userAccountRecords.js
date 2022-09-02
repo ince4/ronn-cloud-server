@@ -11,7 +11,7 @@ module.exports = sequelize => {
     },
     {
       modelName: 'userAccountRecords',
-      timestamps: false,
+      timestamps: true,
       freezeTableName: true,
       tableName: 'user_account_records',
       sequelize,

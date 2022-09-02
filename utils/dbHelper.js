@@ -11,7 +11,8 @@ function dbInit() {
   const sequelize = new Sequelize('ronn_cloud_server', 'root', 'Xa110K1065', {
     host: 'localhost',
     dialect: 'mysql',
-    port: 3306
+    port: 3306,
+    timezone: '+08:00'
   })
 
   const files = find.fileSync(/\.js$/, basePath)
