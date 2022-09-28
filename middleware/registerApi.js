@@ -1,17 +1,29 @@
 const path = require('path')
 const find = require('find')
 const basePath = path.resolve('api')
-const {isLogin} = require('../utils/accountInfo')
+const _ = require('lodash')
+const Parameter = require('parameter')
+const { isLogin } = require('../utils/accountInfo')
+const parameter = new Parameter({ convert: true })
+
 
 module.exports = async function registerApi(app, vd) {
 
   function registerHandler(route, config) {
     const callBack = (req, res) => {
 
-req.session.isLogin = true
+      req.session.isLogin = true
+      //  todo
       if (config.needLogin && !isLogin(req)) {
-        res.send({ statusCode: 0, message: '需登录后调用' })
-        return
+        return res.send({ statusCode: 0, message: '需登录后调用' })
+
+      }
+
+      if (config.validateRule) {
+        const paramError = parameter.validate(config.validateRule, req.body)
+        if (paramError) {
+          return res.send({ statusCode: -1, message: '参数有误', error: paramError })
+        }
       }
 
       config.process(req, res)

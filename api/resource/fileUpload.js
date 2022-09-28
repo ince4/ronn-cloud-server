@@ -1,4 +1,3 @@
-const { getUid } = require('../../utils/accountInfo')
 const { tables } = require('../../utils/dbHelper')
 const multiparty = require('multiparty');
 const path = require('path')
@@ -7,7 +6,7 @@ const fs = require('fs')
 module.exports = {
   needLogin: true,
   async process(req, res) {
-    const { userResourceRecords, userResourceFolderRecords } = tables
+    const { userResourceRecords, userResourceFolderRecords, userResourceTagRecords } = tables
     try {
       const form = new multiparty.Form();
       form.on('part', async function (part) {
@@ -18,30 +17,26 @@ module.exports = {
             fileName: part.filename,
           })
 
-          const [filePre, filePost] = part.filename.split('.')
-          const writeStrem = fs.createWriteStream(path.join(__dirname, '../../resource', filePre + createRes.id + '.' + filePost))
+          const writeStrem = fs.createWriteStream(path.join(__dirname, '../../resource',  createRes.id + part.filename))
           part.pipe(writeStrem)
 
-          if (part.name) {
+          // if (part.name) {
             await userResourceFolderRecords.create({
               resourceId: createRes.id,
-              foldName: part.name,
+              folderName: part.name,
             })
 
-          }
+            await userResourceTagRecords.create({
+              resourceId: createRes.id,
+            })
+
+          // }
           createRes.id
         }
         part.on('error', function (err) {
           fileStrem.destroy();
           throw new Error(err)
         });
-
-
-        res.send({
-          statusCode: 1,
-          statusMsg: '上传成功',
-          part,
-        })
       });
 
       // form.on('close', function() {
@@ -61,9 +56,9 @@ module.exports = {
       })
     }
 
-    // res.send({
-    //   statusCode: 1,
-    //   statusMsg: '上传成功'
-    // })
+    res.send({
+      statusCode: 1,
+      statusMsg: '上传成功'
+    })
   }
 }

@@ -28,6 +28,8 @@ function dbInit() {
 
     tables[fileName] = require(file)(sequelize)
   })
+
+  tables.sequelize = sequelize
 }
 
 module.exports = {

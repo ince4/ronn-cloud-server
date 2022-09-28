@@ -5,6 +5,7 @@ const app = express();
 const session = require('express-session')
 const registerApi = require(`./middleware/registerApi.js`)
 const { dbInit, tables } = require(`./utils/dbHelper`)
+const fs = require('fs')
 
 app.use(session({
   secret: 'tr007443',
@@ -19,6 +20,7 @@ app.use(session({
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(express.static(__dirname + '/resource'))
 app.use((req, res, next) => {
   if (req.path !== '/' && !req.path.includes('.')) {
     res.set({
@@ -35,7 +37,9 @@ app.use((req, res, next) => {
 dbInit()
 
 registerApi(app, '/')
-
+app.get(/resource/, (req, res) => {
+  fs.read
+})
 // app.post('/api/f', (req, res) => {
 //   if (req.body.username !== 'admin' || req.body.password !== '000000') {
 //     return res.send({ status: 1, msg: '登录失败' })

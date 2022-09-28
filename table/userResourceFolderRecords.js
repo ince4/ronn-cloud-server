@@ -19,5 +19,6 @@ module.exports = sequelize => {
       sequelize,
     }
   )
+
   return userResourceFolderRecords
 }
